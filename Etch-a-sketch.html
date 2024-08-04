@@ -13,6 +13,7 @@
             height: 100vh;
             margin: 0;
             flex-direction: column;
+            margin-top: -50px;
         }
 
         .container {
@@ -25,7 +26,7 @@
             color: #0eed12;
             font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 80px;
         }
 
         #container {
@@ -35,12 +36,21 @@
             height: 400px;
             border: 0.5px solid #fefff7;
         }
+
         .grid-square {
             box-sizing: border-box;
-            border: 0.5px solid #fefff7;
+            border: 0.5px solid #525252;
             background-color: #000000;
             transition: background-color 0.3s ease;
         }
+
+        button {
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            font-weight: 400;
+            margin-bottom: 50px;
+            padding: auto;
+        }
+
     </style>
 </head>
 <body>
@@ -50,15 +60,22 @@
         <div id="container"></div>
     </div>
     <script>
-        const button = document.getElementById('changeSize');
-
-        button.addEventListener('click', function() {
-            const userInput = prompt('How many squares per side? (Max 100)');
-            return userInput;
-        });
-
         const container = document.getElementById('container');
+        const button = document.getElementById('changeSize');
         const gridSize = 16;
+
+        function createGrid(size) {
+            container.innerHTML = '';
+
+            for (let i = 0; i < size * size; i++) {
+              const square = document.createElement('div');
+              square.classList.add('grid-square');
+              square.style.width = `${100 / size}%`;
+              square.style.height = `${100 / size}%`;
+              square.addEventListener('mouseover', changeColor);
+              container.appendChild(square);
+            }
+        }
         
         function changeColor(e) {
             e.target.style.backgroundColor = getRandomColor();
@@ -71,14 +88,18 @@
             return `rgb(${r}, ${g}, ${b})`;
         }
 
-        for (let i = 0; i < gridSize * gridSize; i++) {
-            const square = document.createElement('div');
-            square.classList.add('grid-square');
-            square.style.width = `${100 / gridSize}%`;
-            square.style.height = `${100 / gridSize}%`;
-            square.addEventListener('mouseover', changeColor);
-            container.appendChild(square);
-        }
+        button.addEventListener('click', function() {
+            let newSize = prompt('How many squares per side? (Max 100)');
+            newSize = parseInt(newSize);
+            if (newSize && newSize > 0 && newSize <= 100) {
+                currentSize = newSize;
+                createGrid(currentSize);
+            } else {
+                alert('Please enter a valid number between 1 and 100.');
+            }
+        });
+
+        createGrid(gridSize);
     </script>
 </body>
 </html>
